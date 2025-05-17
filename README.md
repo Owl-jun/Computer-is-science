@@ -9,7 +9,7 @@ CS 관련 공부 기록 리포지토리
 |자료구조&알고리즘|[노트](https://github.com/Owl-jun/iot-algorithm-2025)|부경대 IoT 개발자과정 현장수업, 프로그래머스 , [쉬운코드 데이터구조](https://www.youtube.com/watch?v=-2YpvLCT5F8&list=PLcXyemr8ZeoR82N8uZuG9xVrFIfdnLd72)|
 |데이터베이스|[노트](https://github.com/Owl-jun/iot-database-2025)|부경대 IoT 개발자과정 현장수업|
 |리눅스|[노트](https://github.com/Owl-jun/ubuntu)|`책` 이것이 우분투 리눅스다|
-|C++|[노트](https://github.com/Owl-jun/CPPbasic2025)|[유튜브 어소트락 C/C++ 무료강의](https://www.youtube.com/watch?v=PFc4g8mxOiI&list=PL4SIC1d_ab-aOxWPucn31NHkQvNPHK1D1), 부경대 IoT 개발자과정 현장수업(스마트 포인터, STL ...)|
+|C++|[노트](https://github.com/Owl-jun/CPPbasic2025)|[어소트락 C/C++](https://www.youtube.com/watch?v=PFc4g8mxOiI&list=PL4SIC1d_ab-aOxWPucn31NHkQvNPHK1D1), 부경대 IoT 개발자과정 현장수업(스마트 포인터, STL ...)|
 |수학| - |[칸 아카데미](https://ko.khanacademy.org/profile/me/courses) , [3Blue1Brown 선형대수학의 본질](https://www.youtube.com/watch?v=ic_hG2M2nG0&list=PLkoaXOTFHiqhVDo0nWybNmihCP_4BjOFR)|
 
 
