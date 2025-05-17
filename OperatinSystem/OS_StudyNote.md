@@ -1,18 +1,18 @@
 # 운영체제 - 최린 교수님 강의 정리
 
 #### 목차
-1. OS Overview
-2. Process
-3. Thread
-4. Mutual Exclusion and Synchronization
-5. Deadlock and Starvation
-6. Memory Management
-7. Virtual Memory
-8. Uniprocessor Scheduling
-9. Multiprocessor and Realtime Scheduling
-10. IO
-11. File Management
-12. Virtual Machine
+1. [OS Overview](#1-os-overview)
+2. [Process](#2-process)
+3. [Thread]
+4. [Mutual Exclusion and Synchronization]
+5. [Deadlock and Starvation]
+6. [Memory Management]
+7. [Virtual Memory]
+8. [Uniprocessor Scheduling]
+9. [Multiprocessor and Realtime Scheduling]
+10. [IO]
+11. [File Management]
+12. [Virtual Machine]
 ---
 ### 1. OS Overview
 
@@ -103,34 +103,92 @@
 - 3강 (250517)
     - Process Control Block
         ```txt
+        OS가 각 프로세스를 구분 및 관리하기위해 메모리에 저장하는 `데이터 구조체`
+        하나의 프로세스는 하나의 PCB 를 가지며 커널영역 메모리에 저장된다.
+
+        구성 정보는 아래와 같다.
+        PID : 프로세스 고유번호
+        state : 현재 프로세스의 상태 (ready, block ...)
+        PC : 프로그램 카운터
+        레지스터 : 연산 도중 보관해야할 레지스터 값들 (컨텍스트 스위칭 시 덮어씌워지니까)
+        메모리 : 코드 데이터 스택 힙 등의 위치정보 (가상메모리 정보)
+        I/O 상태 : 어떤 파일 및 입출력 장치를 사용하는가
+        계정정보 : 유저ID , 권한 등
+        우선순위 : 스케쥴링 시 사용
         ```
 
     - Dispatcher , Process Execution and Traces
         ```txt
+        Dispatcher : 프로세스 간 전환(switch)을 담당하는 OS 구성요소
+                     컨텍스트 스위칭 수행, 타이머 시작
+                     스케쥴러가 다음 프로세스를 고른다면, 디스패쳐는 전환을 실제로 수행한다.
+        Process Excecution : OS가 프로세스를 생성하고, 실행상태로 진입시키고, 종료하는 전체과정을 의미
+                        예)  NEW -> READY -> RUNNING -> WAITING -> READY -> RUNNING -> TERMINATED
+        Traces : 프로세스가 실행되는 동안 수행한 명령어 주소의 시퀀스 (흔적) 실행 로그와 같은 것으로 이해
         ```
 
     - Process Creation and Termination
         ```txt
+        Process Creation : 새로운 프로세스를 생성하는 작업, 부모 프로세스가 자식 프로세스를 만들어
+                           새로운 작업을 맡기는 형태로 이루어진다.
+                           fork() 생성 -> exec() 다른 프로그램으로 덮어씀
+        Termination : 실행이 끝나거나, 강제종료되는 상황. OS는 프로세스를 clean-up 해줘야함.
+               흐름 : PCB 제거준비 -> 리소스 반납 -> state : ZOMBIE -> 부모가 wait() 호출
+
+        흥미로운 점, 
+            모든 프로세스는 부팅시 생성되는 조상 프로세스의 후손들이다, 모두가 이어져있다는 사실
         ```
 
     - fork
         ```txt 
+        현재 실행 중인 프로세스를 복제해서, 똑같은 새 프로세스를 하나 더 만드는 시스템 콜
+
+        사용하는 이유 ?
+            병렬 작업 , 백그라운드 작업 분리 , exec()와 함께 새 프로그램 실행
+        
+        어떤 복사가 일어날까,
+            Copy-on-Write(CoW) 기술 사용.
+                처음엔 부모와 자식이 같은 메모리 페이지를 공유
+                누군가 데이터를 변경할 때 깊은 복사가 일어남 -> 성능 최적화
+
+        리턴값
+        부모 프로세스 : 자식의 PID
+        자식 프로세스 : 0
+        실패          : -1
         ```
 
     - Five-State Process Model
+
+        <img src="../img/OS0002.png" width=600>
+
         ```txt
+        OS가 프로세스의 상태를 추적하고 관리하기 위해 사용하는 5가지 상태모델
         ```
     
     - Suspended Processes
         ```txt
-        Swapping : 
+        프로세스가 일시적으로 메모리에서 제거되고, 디스크로 스왑되어 대기 상태가 되는 것.
+        Swapping : 메모리 부족으로 인해 프로세스를 메모리 밖으로 쫓아내는 작업
+
+        메모리에 프로세스가 많이 올라와있으나, IO작업 등으로 인해 모든 프로세스가 
+        block 상태가 되어 있다면 CPU는 띵가띵가 놀고있음, 효율을 위해 메모리 밖으로 쫓아내고
+        새로운 프로세스를 들여온다.
         ```
     
     - **Two Suspend State (7-state Process Model)**
         
-        <img src="." width=600>
+        <img src="../img/OS0001.png" width=600>
 
         ```txt
+        이해 부족 부분 정리
+        New -> Admit 상황 : 이는 물리적으로 메모리 공간이 있다 라는 의미가 아닌 그저 PCB 만들고 입장허용한 상태임.
+        그래서 분기가 나뉘게 된다.
+        1. 메모리 여유 : New -> Ready
+        2. 메모리 부족 : New -> Suspended Ready
+
+        Suspended Ready : 스케쥴러의 선택을 못받아 Ready 도중 메모리에서 쫓겨남
+        Suspended Blocked : IO 요청 기다리다가 메모리에서 쫓겨남
+        Running -> Suspended Ready : 실행 도중 kill() 혹은 메모리 부족으로 인해 쫓겨남 (심각한 상황)
         ```
 
     - **Interrupt / Exception**
@@ -142,5 +200,9 @@
             Traps   : 명령어를 마치고 발생(Debug, system call)
             Aborts  : 프로그램을 종료해야할 만큼 심각한 오류.
         
-        인터럽트 / 익셉션 이벤트가 발생 -> 이벤트 핸들러 실행됨 (OS보단 펌웨어에 가까운 개념)
+        인터럽트 / 예외 이벤트가 발생 → OS의 커널이 등록한 이벤트 핸들러(ISR)가 실행된다.
+        이벤트(인터럽트)는 하드웨어/펌웨어에서 발생하지만,
+        그 처리는 OS 커널이 수행하며, 핸들러 코드는 OS에 존재한다.
+        
+        즉, 이벤트는 하드웨어/펌웨어가 발생시키고, 핸들러는 커널에 있다.
         ```
