@@ -6,4 +6,4 @@ CS 공부 기록 리포지토리
 
 - [운영체제](./OperatinSystem/OS_StudyNote.md)
 
-- [네트워크]()
+- [네트워크](./Network/NET_StudyNote.md)
