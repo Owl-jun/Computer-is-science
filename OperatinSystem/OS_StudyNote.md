@@ -3,7 +3,7 @@
 #### 목차
 1. [OS Overview](#1-os-overview)
 2. [Process](#2-process)
-3. [Thread]
+3. [Thread](#3-threads)
 4. [Mutual Exclusion and Synchronization]
 5. [Deadlock and Starvation]
 6. [Memory Management]
@@ -193,12 +193,17 @@
 
     - **Interrupt / Exception**
         ```txt
+        User Mode <-[Interrupt||Exception]-> Kernel Mode
+
         Interrupt : 외부적인 이벤트 (external , Asynchronous)
-            키보드 input , 전원버튼 누르기 등등 ...
+            #INT : 일반적인 인터럽트
+            #NMI : None Maskable Interrupt -> 인터럽트가 disable 되어도 실행되는 인터럽트
+            return to next
+
         Exception : 프로그램 실행 중에 예외가 발생 (internal , Synchronous)
-            Faults  : 명령어를 마치지 못함(page miss)
-            Traps   : 명령어를 마치고 발생(Debug, system call)
-            Aborts  : 프로그램을 종료해야할 만큼 심각한 오류.
+            Faults  : 명령어를 마치지 못함(page miss ...)(의도적이지않음, Return to next)
+            Traps   : 명령어를 마치고 발생(Debug, system call ...)(의도적임)
+            Aborts  : 프로그램을 종료해야할 만큼 심각한 오류. (parity error...)
         
         인터럽트 / 예외 이벤트가 발생 → OS의 커널이 등록한 이벤트 핸들러(ISR)가 실행된다.
         이벤트(인터럽트)는 하드웨어/펌웨어에서 발생하지만,
@@ -206,3 +211,80 @@
         
         즉, 이벤트는 하드웨어/펌웨어가 발생시키고, 핸들러는 커널에 있다.
         ```
+
+- 4강 (250518)
+    - UNIX System V Process Management
+
+    <img src="../img/OS0003.jpg" width=700>
+
+### 3. Threads
+- 4강 (250518)
+    - 들어가며
+        ```txt
+        기본적인 Thread : OS의 스레드
+
+        하드웨어의 Thread(하이퍼스레딩 ...) 
+            : ProgramCounter 가 두개, 독립적인 프로세스라 할 수 있음, OS의 스레드와 다르다. 
+            : 간단히만 알고있자.
+        ```
+
+    - Multithreaded Process Model
+        
+        <img src="../img/OS0005.png" width=600>
+
+    - 멀티 프로세싱 vs 멀티 스레딩
+        <img src="../img/OS0006.png" width = 600>
+        ```txt
+        멀티 프로세싱
+            각 프로세스별로 PCB 생성, 각각의 리소스,IO ... 자원이 모두 독립적임
+            스케쥴링 단위가 프로세스임
+            무겁고 복잡하다.
+            하지만 성능 희생을 감수하고라도 격리성과 안정성이 필요한 곳에 쓸 수 있다.
+
+        멀티 스레딩
+            한 프로세스의 PCB를 공유, 리소스,IO ... 자원을 공유함
+            스케쥴링 단위가 스레드가 되기 때문에
+            스레드별 스레드컨트롤블락(스택포인터, 컨택스트정보, state저장)이 생김
+            가볍고 효율적이다, 허나 공유 자원 접근에 대한 동기화 및 디버깅이 어려운 단점이 있다.
+            위 그림에서 보이다 싶이, 하나의 운명 공동체 이다.
+
+        컴퓨터세계의 방법론 중에서 무조건 이게 정답이다! 는 없다고 본다.
+        상황에 맞추어 사용하기위해 둘 다 잘 알아놓자.
+        ```
+
+
+    - Process Characteristics
+        ```txt
+        Resource ownership : 리소스의 주체가 프로세스 단위임
+        scheduling unit : 스케쥴링이 되는 단위 -> 기존 Process
+        Two characteristics are independent
+            : 스케쥴링 단위만 -> thread 단위로 (Lightweight process)
+        ```
+    
+    - Multithreading
+        ```txt
+        멀티스레딩을 사용하는 이유
+
+            빠른 응답
+            병렬 처리
+            효율적인 메모리, 리소스 공유
+            성능 가성비가 좋다.
+
+        멀티스레딩을 위해 필요한 것들
+
+            thread execution state : Ready, Run
+            thread context : 스레드 별 상태정보
+            thread execution stack : 스레드 별 스택메모리 공간
+
+        특징
+            `스레드들은 하나의 운명 공동체` 이기 때문에
+            Suspend 시 모든 스레드가 쫓겨남
+            kill 시 모든 스레드가 좀비가 됨
+
+        멀티스레딩 프로세스 예시
+
+            Foreground and background jobs
+            Asynchronous processing
+            Batch processing
+        ```
+
