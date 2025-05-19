@@ -348,6 +348,8 @@
         Kernel thread       : 매핑되지 않은 OS 커널 스레드
         ```
 
+---
+
 ### 4. Mutual Exclusion and Synchronization
 - 5강(250519)
     - Process Interaction
