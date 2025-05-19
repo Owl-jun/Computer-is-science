@@ -4,7 +4,7 @@
 1. [OS Overview](#1-os-overview)
 2. [Process](#2-process)
 3. [Thread](#3-threads)
-4. [Mutual Exclusion and Synchronization]
+4. **[Mutual Exclusion and Synchronization](#4-mutual-exclusion-and-synchronization)**
 5. [Deadlock and Starvation]
 6. [Memory Management]
 7. [Virtual Memory]
@@ -286,5 +286,80 @@
             Foreground and background jobs
             Asynchronous processing
             Batch processing
+        ```
+
+- 5강 (250519)
+    - User Level Threads (ULTs)
+        ```txt
+        유저 레벨에서의 스레드, 멀티스레딩인척하는 눈속임이 아닐까?
+            장점 
+                Application 자체적으로 스케쥴을 한다. -> 커널진입이 없음으로 가볍다.
+                맞춤형 스케쥴링이 가능하다.
+                커널을 필요로하지 않기 때문에 어디서나 실행이 가능하다.
+            단점
+                프로세스가 Block 이 되면 모든 스레드가 Block이 된다.
+                하나의 프로세스에서 하나의 프로세서만 이용가능하다.
+                즉, 멀티 스레딩의 장점을 이용할 수 없다.
+            왜 필요할까?
+        ```
+
+    - Kernel Level Threads (KLTs)
+        ```txt
+        OS 레벨에서의 스레드, 찐 스레드
+            장점
+                멀티 스레딩의 장점을 모두 이용가능하다.
+            단점
+                Context Switching 비용이 발생, 오버헤드가 ULT 보다 비교적 크다.
+                스레드 생성/소멸 비용이 큼
+                OS 스케줄러가 유저 의도대로 움직이지 않음 (맞춤 스케줄링 불가)
+
+            왜 필요할까?
+                멀티코어 활용이나 비동기 IO 처리 등의 상황에서
+                병렬성 확보와 블로킹 회피를 위해 필요하다
+        ```
+
+    - Combined Approach
+        ```txt
+        ULT 와 KLT 의 장점을 모두 살리고싶은 욕심쟁이의 접근법
+
+            여러 개의 ULT → 적은 수의 KLT에 매핑 (M:N)
+            각 KLT가 여러 ULT를 감싸는 구조
+
+        스레드 풀 개념과 유사한 점
+            KLT 수 제한 → 스레드 풀처럼 자원 관리함
+            내부에 유저 스레드들을 매핑해서 효율적으로 돌림
+        ```
+    
+    - Performance Impact of Multicores
+        ```txt
+        암달의 법칙
+            : 멀티 스레드 에서 병렬처리가 불가능한 직렬적인 작업들이 성능과 직결된다.
+            
+                1 / ((병렬 / 코어수) + (직렬 작업)) = 스피드업  
+            
+            즉, 병렬처리가 불가능한 직렬 작업(inherently serial)이 속도를 결정하는데 크게 기여한다.
+        ```
+    
+    - Solaris 에서의 용어
+        ```txt
+        Process             : 프로세스
+        User-level thread   : ULT
+        Lightweight process : ULT 를 KLT 에 매핑 (Combined 접근)
+        Kernel thread       : 매핑되지 않은 OS 커널 스레드
+        ```
+
+### 4. Mutual Exclusion and Synchronization
+- 5강(250519)
+    - Process Interaction
+        ```txt
+        Mutual exclusion 
+            : 두 프로세스가 하나의 프린터를 필요로 할 때
+            -> 원하지 않는 결과가 나올 수 있다.
+            -> 한번에 한 프로세스만 접근할 수 있도록 크리티컬 섹션으로 보호해줘야한다.
+            how ? 한 프로세스가 크리티컬 섹션에서 작업중일 때 컨텍스트 스위칭을 멈춘다면?
+        Deadlock
+            : 
+        Starvation
+        Race condition
         ```
 
