@@ -360,8 +360,122 @@
             -> 한번에 한 프로세스만 접근할 수 있도록 크리티컬 섹션으로 보호해줘야한다.
             how ? 한 프로세스가 크리티컬 섹션에서 작업중일 때 컨텍스트 스위칭을 멈춘다면?
         Deadlock
-            : 
+            : 리소스 R1, R2가 둘다 있어야 작업이 가능할 때, 한명이 R1을 , 한명이 R2를 들고있는 상황
+            -> 그 누구도 양보할 생각이 없음.
+            -> 평생 기다림.
         Starvation
+            : 인싸들이 계속 리소스를 사용해서 왕따 당하는 녀석에게 리소스가 들어오지 않는 상황
+            -> 스케쥴러로 인해, 어떤 프로세스에게 리소스가 할당되지 않는 상황
         Race condition
+            : 전역 데이터에 두 프로세스 이상 접근하여 서로 교차하여 실행되는 상황
+            -> 예상하지 못한 결과가 나올 수 있다.
         ```
 
+- 6강(250520)
+    - Critical section
+        ```txt
+        하나의 리소스를 둘 이상의 스레드가 동시에 접근하면 문제가 생기므로, 
+        "상호 배제(Mutual Exclusion)" 가 필요하다.
+
+        이를 보장하는 영역이 바로 Critical Section
+
+        어떻게 구현할까?
+            : 인터럽트를 disable 하는 방식은 싱글 코어에선 유효할지 몰라도, 멀티스레딩 상황에선 성립하지않는다.
+            , 또 CS 자체가 막히기 때문에 CPU 사용률 측면에서도 불리할 것이다. 그렇다면 어떻게 해결가능할까.
+            -> 먼저 Atomic Operation을 알아야한다.
+        ```
+    
+    - Atomic Operation
+        ```txt
+        "All or Nothing" 이라는 속성 덕분에 중간에 끼어들 수 없으므로 동기화에 적합.
+        
+        대표 예시:
+            Test-and-Set
+            Compare-and-Swap
+            Fetch-and-Add
+
+        2개이상의 명령어를 하나의 Atomic operation 으로 정의 해놓은 것.
+        ```
+
+    - HW Support for Mutex
+        ```txt
+        하드웨어단 에서 Special machine instructions 제공
+            Test-and-set , fetch-and-add, compare-and-swap ... -> Atomic Operation
+        Problem
+            Busy Waiting : 계속해서 test-and-set , compare ... 연산을 하기 때문에 CPU 낭비가 생기는 현상
+            Deadlock and Starvation can also happen ...
+        ```
+    
+    - Critical Section by Compare-and-Swap , Exchange
+        ```txt
+        무한 루프 돌면서 lock 획득 경쟁하는 과정
+        누군가 작업중이라면 lock state = 1
+        작업이 끝난다면 lock state = 0
+
+        state 가 0 일 때 경쟁중인 스레드중 하나가 락을 쥐고(1로 만들고) 작업을 진행한다.
+        ```
+        ```cpp
+        bool CompareAndSwap(int* addr, int expected, int new_val) {
+            if (*addr == expected) {
+                *addr = new_val;
+                return true;
+            }
+            return false;
+        }
+        ```
+
+    - 특별한 명령어(Atomic Oper)의 장점과 단점
+        ```txt
+        장점
+            멀티 프로세서 환경에서도 크리티컬 섹션 보장
+            쉽고 간단하다.
+            리소스 당 크리티컬 섹션을 부여할 수 있다.
+        단점
+            Busy-waiting
+            Starvation 발생가능
+            Deadlock 발생가능
+        ```
+    
+    - Semaphore
+        - 예시 흐름 T1 ~ T4 스레드 4개가 순차적으로 세마포어 진입
+
+        | 시점 | 동작 | S 값 변화 | 대기 큐 | 설명 |
+        |:----:|:----:|:---------:|:-------:|:----:|
+        | 0 | Init | 1 | [] | 자원 1개 준비 |
+        | 1 | T1 P() | 0 | [] | T1 실행 시작 |
+        | 2 | T2 P() | -1 | [T2] | 자원 없음 → Block |
+        | 3 | T3 P() | -2 | [T2, T3] | Block |
+        | 4 | T4 P() | -3 | [T2, T3, T4] | Block |
+        | 5 | T1 V() | -2 → -2 | [T3, T4] | T2 깨움 → 바로 실행, 값은 그대로 |
+        | 6 | T2 V() | -1 → -1 | [T4] | T3 깨움 |
+        | 7 | T3 V() | 0 | [] | T4 깨움 |
+        | 8 | T4 V() | 1 | [] | 자원 반납 완료 |
+
+        ```txt
+        리소스 접근을 관리해주는 특별한 변수
+
+        initialized operation
+            : non-negative integer value
+
+        V operation ("signal")
+            : Increment the semaphore , wait Queue 에 스레드가 있다면 깨움
+            : 분기 1. 레디큐에 스레드존재 -> 스레드 깨움
+                   2. 레디큐가 비었음 -> s = s + 1;
+
+        P operation ("wait")
+            : Decrement the semaphore , 자원이 없다면 Block
+            : 일단 s-- , s < 0 이라면 레디큐로 들어감.
+
+        Type of semaphores
+            Binary semaphore (Mutex 대용으로 사용가능)
+                - Have a value of 0 or 1
+                    0 (locked)
+                    1 (unlocked)
+            Counting semaphore
+                - Can have an arbitrary resource count
+
+            String semaphore
+                - FIFO 보장 (큐 사용)
+            Weak semaphore
+                - 큐를 사용하지 않음
+        ```
