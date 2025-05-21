@@ -459,8 +459,8 @@
 
         V operation ("signal")
             : Increment the semaphore , wait Queue 에 스레드가 있다면 깨움
-            : 분기 1. 레디큐에 스레드존재 -> 스레드 깨움
-                   2. 레디큐가 비었음 -> s = s + 1;
+            : 분기 1. 레디큐에 스레드존재 -> 스레드 깨움 -> s++;
+                   2. 레디큐가 비었음 -> s++;
 
         P operation ("wait")
             : Decrement the semaphore , 자원이 없다면 Block
@@ -474,8 +474,90 @@
             Counting semaphore
                 - Can have an arbitrary resource count
 
-            String semaphore
+            Strong semaphore
                 - FIFO 보장 (큐 사용)
             Weak semaphore
                 - 큐를 사용하지 않음
+        ```
+
+- 7강 (250521)
+    - Producer/Consumer Problem
+        ```txt
+        프로듀서 - 공유 버퍼 - 컨슈머 구조
+            공유 버퍼 동기화가 필요함. (크리티컬 섹션으로 보호)
+            * 중요 : 버퍼가 비었을 때 컨슈머의 접근을 막아줘야함. (데드락 발생)
+
+        흐름 설명 (의도):
+            n : 세마포어 (버퍼에 남은 공간 or 아이템 개수 추적용)
+            s : 크리티컬 섹션 보호용 (Mutex 역할)
+
+        produce()
+            wait(n)           // 자원이 남았는지 확인 (ex: 버퍼 공간)
+            wait(s)           // 공유 버퍼 접근 진입 (mutex lock)
+            append()          // 생산된 아이템 버퍼에 넣기
+            signal(s)         // mutex unlock
+
+        consume()
+            wait(s)           // 공유 버퍼 접근
+            take()            // 아이템 가져오기
+            signal(s)         // unlock
+
+            signal(n)         // 버퍼 공간 하나 확보됨
+            consume()         // 실제 소비 처리
+
+        n은 버퍼 공간 or 아이템 개수 추적용 세마포어
+        s는 mutex 역할
+        하지만 이런 방식은 데드락에 취약하고 복잡 
+        -> 그래서 고수준 동기화 도구(모니터, 메시지 패싱)가 등장하게 됨
+        ```
+    
+    - Monitor
+        ```txt
+        구성 요소:
+            - Mutex lock          (상호배제)
+            - Condition Variable  (조건 대기)
+            - 대기 큐             (자동 관리)
+
+        API:
+            - cwait(c): 조건 만족할 때까지 대기 (wait)
+            - csignal(c): 조건 만족됨을 알림 (notify)
+
+        프로듀서:
+            if (버퍼가 꽉참) 
+                cwait(full)
+            else 
+                append()
+
+        컨슈머:
+            if (버퍼가 비었음)
+                cwait(empty)
+            else
+                take()
+        ```
+
+    - Message Passing
+        ```txt
+        프로세스 간 통신(IPC) 모델
+
+        제공 기능:
+            1. Mutual exclusion (자원 동시 접근 방지)
+            2. Synchronization  (타이밍 맞춤)
+            3. Communication     (데이터 교환)
+
+        메서드:
+            send(dest, message)      // 메시지를 보냄
+            receive(source, message) // 메시지를 받음
+        ```
+
+    - Synchronization
+        ```txt
+        [보내기 시점]
+
+        - blocking send: 수신자가 준비될 때까지 기다림 (안전하지만 느림)
+        - non-blocking send: 보내고 바로 리턴 (빠름, 실패 가능성 있음)
+
+        [받기 시점]
+
+        - blocking receive: 메시지 도착할 때까지 기다림
+        - non-blocking receive: 수신 가능한 메시지가 있으면 바로 처리, 없으면 넘김
         ```
