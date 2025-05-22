@@ -5,7 +5,7 @@
 2. [Process](#2-process)
 3. [Thread](#3-threads)
 4. **[Mutual Exclusion and Synchronization](#4-mutual-exclusion-and-synchronization)**
-5. [Deadlock and Starvation]
+5. [Deadlock and Starvation](#5-deadlock-and-starvation)
 6. [Memory Management]
 7. [Virtual Memory]
 8. [Uniprocessor Scheduling]
@@ -560,4 +560,51 @@
 
         - blocking receive: 메시지 도착할 때까지 기다림
         - non-blocking receive: 수신 가능한 메시지가 있으면 바로 처리, 없으면 넘김
+        ```
+
+
+### 5. Deadlock and Starvation
+- 8강(250522)
+    - Deadlock
+        ```txt
+        실생활에서 데드락의 예시
+            두가지 상황
+                재사용 가능한 리소스(도로)를 사용할 때
+                    사거리에서 모든 방향의 차가 앞으로 전진하려고 할 때.
+
+                소비가 가능한 리소스(선물)를 사용할 때
+                    친구와 서로 먼저 선물을 받으면 선물을 줘야지 하고 있을 때.
+        
+        ```
+    
+    - Deadlock 발생 조건
+        ```txt
+        Mutual exclusion
+            하나의 자원은 오직 한 프로세스만 접근 가능
+        Hold and wait
+            하나의 자원을 가지고 또 다른 자원을 기다리고 있을 때
+        No preemption
+            누가 가진 자원을 뺏어갈 수 없을 때
+
+        Circular wait
+            프로세스들이 서로를 원형으로 기다림
+
+            위 3가지가 모두 충족되어도 데드락은 발생하지 않는다, 허나 Circular Wait 이 발생하면
+            데드락이 발생됨. 
+        ```
+
+    - 3 Approaches for Deadlocks(방지대책)
+        ```txt
+        Deadlock prevention
+        	Deadlock 발생 조건 중 하나 이상을 사전에 막음
+            보수적, 자원 낭비 가능
+        Deadlock avoidance
+            	Deadlock이 발생할 가능성이 있는 상황을 미리 피함
+                시스템 상태 정보 필요
+
+                bankers's algorithm
+                    자원 요청이 시스템의 안전 상태를 유지하는지 확인
+        Deadlock detection
+            Deadlock이 발생한 후 이를 탐지하고 해결
+                가장 유연하지만 위험
         ```
