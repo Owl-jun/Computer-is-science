@@ -596,15 +596,72 @@
     - 3 Approaches for Deadlocks(방지대책)
         ```txt
         Deadlock prevention
-        	Deadlock 발생 조건 중 하나 이상을 사전에 막음
-            보수적, 자원 낭비 가능
-        Deadlock avoidance
-            	Deadlock이 발생할 가능성이 있는 상황을 미리 피함
-                시스템 상태 정보 필요
+            Deadlock 발생 조건 중 하나 이상을 사전에 막음
+                보수적, 자원 낭비 가능
 
-                bankers's algorithm
-                    자원 요청이 시스템의 안전 상태를 유지하는지 확인
+        Deadlock avoidance
+            Deadlock이 발생할 가능성이 있는 상황을 미리 피함
+                시스템 상태 정보 필요
+                    bankers's algorithm
+                        자원 요청이 시스템의 안전 상태를 유지하는지 확인
+
         Deadlock detection
             Deadlock이 발생한 후 이를 탐지하고 해결
                 가장 유연하지만 위험
+        ```
+
+- 9강 (250523)
+    - Deadlock avoidance algorithm
+        ```txt
+        Banker's Algorithm (은행가 알고리즘)
+
+            각 프로세스가 최대 요구량을 명시해야 함
+
+            시스템이 안전 상태(safe state) 에서만 자원 할당
+
+            안전 상태란: 모든 프로세스가 정상적으로 종료 가능한 자원 상태
+        ```
+
+    - Deadlock detection algorithm
+        ```txt
+        교착 상태가 이미 발생한 후, 이를 탐지하는 방법.
+
+        Resource Allocation Graph (RAG) + Cycle Detection
+
+            자원-프로세스 관계를 그래프로 나타냄
+
+            사이클이 생기면 Deadlock 발생 가능성 있음
+
+            다중 인스턴스 자원은 추가적인 탐지 알고리즘 필요
+
+
+        ```
+
+    - Deadlock Recovery
+        ```txt
+        1. 모든 교착 프로세스 강제 종료 (abort all)
+        2. Checkpoint를 이용해 이전 상태로 복구 (rollback)
+        3. 하나씩 프로세스 종료 → 교착 해소될 때까지 (successive abort)
+        4. 하나씩 자원 강제 회수 (preemption)
+        ```
+
+    - Deining Philosophers Problem
+        ```txt
+        Deadlock과 Concurrency 문제를 설명하는 고전적 예제.
+
+            N명의 철학자가 원형 테이블에 앉아 있음
+
+            각 철학자 왼쪽과 오른쪽에 포크가 하나씩 있음 (총 N개)
+
+            철학자는 생각 -> 먹기(양쪽 포크 필요)를 반복함
+
+        모든 철학자가 동시에 왼쪽 포크를 집고 기다리면 교착 상태 발생
+
+            비대칭 자원 요청 (짝수는 왼쪽→오른쪽, 홀수는 오른쪽→왼쪽)
+
+            하나씩만 포크 들게 제한 (최대 N-1명만 식사 가능)
+
+            Arbitrator(중재자) 프로세스를 둠
+
+            tryLock 방식 사용 (자원 미확보 시 포기)
         ```
