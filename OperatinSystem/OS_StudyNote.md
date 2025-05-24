@@ -6,7 +6,7 @@
 3. [Thread](#3-threads)
 4. **[Mutual Exclusion and Synchronization](#4-mutual-exclusion-and-synchronization)**
 5. [Deadlock and Starvation](#5-deadlock-and-starvation)
-6. [Memory Management]
+6. [Memory Management](#6-memory-management)
 7. [Virtual Memory]
 8. [Uniprocessor Scheduling]
 9. [Multiprocessor and Realtime Scheduling]
@@ -613,12 +613,9 @@
 - 9강 (250523)
     - Deadlock avoidance algorithm
         ```txt
-        Banker's Algorithm (은행가 알고리즘)
-
+        Banker's Algorithm 
             각 프로세스가 최대 요구량을 명시해야 함
-
             시스템이 안전 상태(safe state) 에서만 자원 할당
-
             안전 상태란: 모든 프로세스가 정상적으로 종료 가능한 자원 상태
         ```
 
@@ -627,11 +624,8 @@
         교착 상태가 이미 발생한 후, 이를 탐지하는 방법.
 
         Resource Allocation Graph (RAG) + Cycle Detection
-
             자원-프로세스 관계를 그래프로 나타냄
-
             사이클이 생기면 Deadlock 발생 가능성 있음
-
             다중 인스턴스 자원은 추가적인 탐지 알고리즘 필요
 
 
@@ -648,20 +642,55 @@
     - Deining Philosophers Problem
         ```txt
         Deadlock과 Concurrency 문제를 설명하는 고전적 예제.
-
             N명의 철학자가 원형 테이블에 앉아 있음
-
             각 철학자 왼쪽과 오른쪽에 포크가 하나씩 있음 (총 N개)
-
             철학자는 생각 -> 먹기(양쪽 포크 필요)를 반복함
 
         모든 철학자가 동시에 왼쪽 포크를 집고 기다리면 교착 상태 발생
-
             비대칭 자원 요청 (짝수는 왼쪽→오른쪽, 홀수는 오른쪽→왼쪽)
-
             하나씩만 포크 들게 제한 (최대 N-1명만 식사 가능)
-
             Arbitrator(중재자) 프로세스를 둠
-
             tryLock 방식 사용 (자원 미확보 시 포기)
+        ```
+
+- 10강 (250524)
+    - UNIX Concurrency Mechanisms
+        - Signals
+            ```txt
+            - 기존: 예외(Exception)가 발생하면 프로세스는 무조건 terminate.
+            - 개선: 유저가 signal handler를 등록하면, 해당 시그널을 받아 커스텀 처리 가능.
+
+            예)
+            SIGINT  (Ctrl+C)  
+            SIGTERM (종료 요청)  
+            SIGSEGV (잘못된 메모리 접근)
+
+            → signal() 또는 sigaction() 함수로 핸들러 등록 가능
+            ```
+
+### 6. Memory Management
+
+- 10강 (250524)
+    - 용어 정리
+        ```txt
+        Frame   : 메인 메모리의 고정된 물리적 블록 (RAM 단위)
+        Page    : 디스크(보조 저장장치)의 고정된 블록 (Swap-in/out 단위)
+        Segment : 프로그램 구조적 단위: .text, .data, .bss, .heap, .stack 등
+
+        Relocation  : 프로세스가 메모리에서 다른 위치로 이동될 수 있음 (ex. 스와핑 발생 시)
+        Protection  : 각 메모리 영역에 대해 읽기/쓰기/실행 권한 설정 필요, Segmentation Fault는 protection 위반 시 발생
+        Sharing     : 라이브러리 코드(.text) 등은 여러 프로세스가 공유 가능, 메모리 절약 + 중복 로딩 방지 효과
+        ```
+    
+    - Memory Organization
+        ```txt
+        Logical organization
+            - 프로그램이 모듈화되어 로딩됨 (예: 함수 단위, 라이브러리 단위)
+            - 컴파일러/링커/로더 관점에서 관리
+        Physical organization
+            - DRAM, Flash, 캐시 등 하드웨어 관점에서 메모리 배치
+        Memory management techniques involve
+            - Paging : 고정 크기 단위로 메모리 관리
+            - Segmentation : 의미 단위(코드, 데이터 등)로 분할 관리
+            - Virtual Memory : 논리 주소 → 물리 주소 매핑 + 필요한 페이지만 메모리에 올림
         ```
