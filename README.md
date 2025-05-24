@@ -1,5 +1,11 @@
 # Computer-is-science
-CS 관련 공부 기록 리포지토리
+공부 기록 리포지토리
+
+## 단기 PLAN
+6월 : WinSock 완전정복(1개월~1개월)
+7월 : WinSock IOCP 기반 서버 구현(2주)
+8월 : CLI -> REST -> API Gateway -> TCP SOCKET -> 각 SERVER 구조의 상용 서버 프로젝트. (WinSock + IOCP + Redis + REST를 위한 Tools)
+9월 : 프로젝트 마무리 및 문서화 , 이력서
 
 |과목|노트|학습|
 |:--:|:--:|:--:|
