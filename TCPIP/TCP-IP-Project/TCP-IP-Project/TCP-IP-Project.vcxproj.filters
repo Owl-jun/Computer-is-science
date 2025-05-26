@@ -1,6 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="CstyleServer.cpp" />
+    <ClCompile Include="MyStyleServer.cpp" />
+    <ClCompile Include="CstyleServer.cpp">
+      <Filter>Cstyle</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="SOCKET">
+      <UniqueIdentifier>{97d8a6f7-e201-476b-ad7d-af33ef7e289e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Cstyle">
+      <UniqueIdentifier>{a8c277fe-ec54-4af4-92d0-8bb1bb0900c6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientSocket.hpp">
+      <Filter>SOCKET</Filter>
+    </ClInclude>
+    <ClInclude Include="Acceptor.hpp">
+      <Filter>SOCKET</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
