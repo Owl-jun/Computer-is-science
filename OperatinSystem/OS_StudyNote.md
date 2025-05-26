@@ -742,7 +742,7 @@
             - Temporal Locality : 같은 참조가 여러번 일어날 확률이 높다 (캐싱)
 
         Memory Hierarchy
-            속도 vs 용량 트레이드 오프 (용량이 작을 수록 속도가 빠름)
+            속도 vs 용량 트레이드 오프 (용량이 작을 수록, CPU와 가까울수록 속도가 빠름)
             - 레지스터
             - Cache L1  hit 96%
             - Cache L2  hit 99%
@@ -750,5 +750,57 @@
             - DRAM      hit 99.99999%
             - SSD       
             - CLOUD ...
+        ```
 
+- 12강 (250526)
+    - Cache
+        ```txt
+
+        Fully Associative Cache
+            정의: 메모리의 어떤 블록이든 캐시의 모든 라인에 저장 가능
+            주소 구성: [Tag | Offset] (Index 없음)
+            장점: 캐시 활용도 극대화 (Miss 최소화)
+            단점: 비교 대상이 많아서 비용↑, 구현 복잡↑
+            용도: 소규모 고성능 캐시에 적합 (예: TLB)
+
+        Direct Mapped Cache
+            정의: 메모리 블록이 딱 하나의 캐시 라인에만 매핑됨
+            주소 구성: [Tag | Index | Offset]
+            장점: 단순하고 빠름
+            단점: **충돌(Collision)**이 잦음 → 서로 다른 블록이 같은 캐시 라인에 자꾸 덮어씀
+            주의: 성능 안 나올 수 있음 (빈도 높은 데이터끼리 충돌 시)
+
+        Set Associative Cache
+            정의: 캐시를 여러 Set으로 나누고, 각 Set 내에서 Fully Associative 구조를 가짐
+            (예: 4-way set associative → 각 Set에 4개의 블록 저장 가능)
+            주소 구성: [Tag | Set Index | Offset]
+            장점: 충돌 줄이면서도 비교 비용을 완전연관보다 줄임
+            트레이드오프: 구현 난이도, 비교 비용
+
+        ---
+        Cache Block Replacement
+            캐시가 꽉 찼을 때, 어떤 블록을 내보낼지 정하는 전략
+            LRU (Least Recently Used): 가장 오래 안 쓰인 블록 교체 → 현실적이지만 구현 복잡
+            FIFO (First In First Out): 먼저 들어온 놈부터 제거 → 구현 간단
+            Random: 랜덤하게 제거 → 구현 가장 간단, 하지만 성능 예측 어려움
+            LFU (Least Frequently Used): 가장 적게 사용된 블록 제거 → 캐시 특성상 잘 안 씀
+
+        ---
+        3+1 Types of Cache Misses
+            캐시가 해당 데이터를 갖고 있지 않아 메모리 접근이 발생하는 경우
+
+            1. Compulsory Miss (필연적 미스)
+            처음 보는 블록 → 아직 캐시에 없음
+            aka Cold Miss
+            2. Capacity Miss (용량 부족 미스)
+            캐시 용량이 작아서 블록을 다 담지 못할 때 발생
+            3. Conflict Miss (충돌 미스)
+            서로 다른 블록이 같은 캐시 라인/셋에 매핑되면서 덮어씌워지는 경우
+            (→ 주로 Direct Mapped / 낮은 Set 수에서 자주 발생)
+            (+1) Coherence Miss (일관성 미스)
+            멀티코어 환경에서 다른 프로세서가 캐시를 무효화한 경우 발생
+            → MESI 등 캐시 일관성 프로토콜과 연관
+
+            소프트웨어 캐시도 결국은 "데이터를 빠르게 접근하기 위한 계층적 메모리 설계" 이다.
+            하드웨어 캐시의 설계 원리는 곧 소프트웨어 캐시의 성능 튜닝 바이블이다.
         ```
