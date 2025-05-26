@@ -36,15 +36,12 @@ int main() {
 	// Packet Parsing ----
 
 	// 1-1. delimiter string Style
-	//Delimiter_stringStyle(sock);
+	Delimiter_stringStyle(sock);
 
 	// 1-2. delimiter C Style
 	Delimiter_CStyle(sock);
 
-	// 2-1. type + length + payload string Style
-	tlPayload_stringStyle(sock);	
-	
-	// 2-2. type + length + payload C Style
+	// 2-1. TLP C Style
 	tlPayload_CStyle(sock);
 
 
@@ -128,14 +125,74 @@ void Delimiter_CStyle(SOCKET& sock) {
 	}
 }
 
-void tlPayload_stringStyle(SOCKET sock) {
+enum STATE {
+	NONE,
+	TYPE,
+	LENGTH,
+	PAYLOAD
+};
 
+enum TYPE {
+	HUNGRY = 0x01,
+	THIRSTY = 0x02
+};
 
+void tlPayload_CStyle(SOCKET& sock) {
+	char type = TYPE::HUNGRY;
+	char payload[] = "NEED FOOD";
+	int length = htonl(strlen(payload));
+	// type : 1byte | length : 4byte | payload : N byte
 
-}
+	int state = STATE::NONE;
+	char buf[1024];
+	char recvBuf[2048];
+	int recvTotal = 0;
+	int pos = 0;
+	int payloadLen = 0;
 
-void tlPayload_CStyle(SOCKET sock) {
+	memcpy(buf, &type, 1);
+	memcpy(buf + 1, &length , 4);
+	memcpy(buf + 5, payload, strlen(payload));
+	send(sock, buf, 5 + strlen(payload), 0);
 
-
-
+	state = STATE::TYPE;
+	// 1byte ¼ö½Å
+	while (1) 
+	{
+		if (state == STATE::TYPE) {
+			int recvLen = recv(sock, buf, 1, 0);
+			if (recvLen <= 0) { break; }
+			memcpy(recvBuf + pos, buf, recvLen);
+			pos += recvLen;
+			if (pos == 1) {
+				state = STATE::LENGTH;
+			}
+		}
+		else if (state == STATE::LENGTH) {
+			int recvLen = recv(sock, buf, 4, 0);
+			if (recvLen <= 0) { break; }
+			memcpy(recvBuf + pos, buf, recvLen);
+			pos += recvLen;
+			if (pos == 5) {
+				memcpy(&payloadLen, recvBuf + 1, 4);
+				payloadLen = ntohl(payloadLen);
+				state = STATE::PAYLOAD;
+			}
+		}
+		else if (state == STATE::PAYLOAD) {
+			int recvLen = recv(sock, buf, payloadLen, 0);
+			if (recvLen <= 0) { break; }
+			memcpy(recvBuf + pos, buf, recvLen);
+			pos += recvLen;
+			if (pos == 5 + payloadLen) {
+				state = STATE::NONE;
+			}
+		}
+		else
+		{
+			recvBuf[pos] = '\0';
+			cout << "> payload: " << (recvBuf + 5) << endl;
+			break;
+		}
+	}
 }
