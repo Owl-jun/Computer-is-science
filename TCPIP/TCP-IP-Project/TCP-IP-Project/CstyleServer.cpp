@@ -3,8 +3,10 @@
 #include <iostream>
 #include <WinSock2.h>
 #include <ws2tcpip.h> // inet_pton
+
 #pragma comment(lib, "ws2_32.lib")  // 링크 설정 잊지 말 것
 
+#define BUF_SIZE 1024
 int main() {
 
     WSADATA wsaData; // WSA 구조체 초기화 및 소켓 기능 활성화
@@ -14,13 +16,18 @@ int main() {
         return 1;
     }
 
+    char message[BUF_SIZE];
+    int msg_len, i;
+
     // 주소정보 구조체 sockaddr , 여기에 데이터삽입을 위한 sockaddr_in
     sockaddr_in servAddr = {};
+    memset(&servAddr, 0, sizeof(servAddr));             // 0으로 전체 초기화!
     servAddr.sin_family = AF_INET;                      // AF_INET : IPv4
     servAddr.sin_port = htons(12345);                   // 포트    , htons = short , htonl = long : 리틀앤디안 -> 빅앤디안
-    inet_pton(AF_INET, "127.0.0.1", &servAddr.sin_addr); // IP , 문자열 -> 바이너리
-
-
+    servAddr.sin_addr.s_addr = htonl(INADDR_ANY);       // 서버의 IP 주소 자동할당
+    // inet_pton(AF_INET, "127.0.0.1", &servAddr.sin_addr); // IP , 문자열 -> 바이너리
+    
+    
     // socket 생성
     SOCKET soc = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); // AF_INET : IPv4 , SOCK_STREAM : 연결성 | SOCK_DGRAM : 비연결성 , IPPROTO_TCP : TCP 프로토콜
     if (soc == INVALID_SOCKET) {
@@ -36,9 +43,17 @@ int main() {
 
     sockaddr_in clientAddr = {};                        // 빈 소켓 주소정보 구조체
     int clientAddrSize = sizeof(clientAddr);
-    SOCKET cliSock = accept(soc, (sockaddr*)&clientAddr, &clientAddrSize);   // soc 으로 클라요청 오면 소켓정보 clientAddr에 만들어서 생성해주겠다.
-    std::cout << "클라이언트 연결!" << std::endl;
+    for (int i = 0; i < 5; ++i) {
 
+        SOCKET cliSock = accept(soc, (sockaddr*)&clientAddr, &clientAddrSize);   // soc 으로 클라요청 오면 소켓정보 clientAddr에 만들어서 생성해주겠다.
+        std::cout << "클라이언트 연결!" << std::endl;
+        
+        while ((msg_len = recv(cliSock, message, BUF_SIZE - 1, 0)) != 0)
+        {
+            send(cliSock, message, msg_len, 0);
+        }
+        closesocket(cliSock);
+    }
 
     // 3. 마무리
     closesocket(soc);
