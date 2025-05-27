@@ -804,3 +804,52 @@
             소프트웨어 캐시도 결국은 "데이터를 빠르게 접근하기 위한 계층적 메모리 설계" 이다.
             하드웨어 캐시의 설계 원리는 곧 소프트웨어 캐시의 성능 튜닝 바이블이다.
         ```
+
+- 13강 (250527)
+
+    - Virtual Memory
+        ```txt
+        실제 프로그램이 캐시,ram,disk 어디에 있던 프로그래머가 신경 안써도 되게끔
+        해주는 가상메모리.
+
+        이로인해 프로그래머는 레지스터와 가상메모리만 신경쓰면 된다.
+
+        Memory allocation (Placement)
+            - 어떤 프레임이던 가상메모리에 올라올 수 있다.
+        Memory deallocation (Replacement)
+            - LRU , Clock algorithm (어떤 프레임을 쫓아낼 것인가)
+        Memory mapping (Translation)
+            - 가상페이지 <-> 실제저장소 매핑
+        ```
+
+    - TLB (MMU)
+        ```txt
+        페이지 테이블 캐시
+        Translation Lookaside Buffer
+
+        역할
+            CPU가 가상 주소 → 물리 주소 변환할 때
+            매번 RAM의 페이지 테이블을 참조하면 느림
+
+            그래서 자주 쓰는 매핑은 TLB (작은 캐시)에 저장해두고
+            거기서 먼저 찾아본다 (캐시 히트)
+
+            | 구성 요소                    | 역할         |
+            | -----------------------------| ------------ |
+            | 가상 페이지 번호             | 입력 (key)   |
+            | 물리 프레임 번호             | 출력 (value) |
+            | valid bit, protection bit 등 | 메타 정보    |
+
+        [프로그램 실행]
+            → 주소 참조 (0xABCD...)
+
+            → MMU가 TLB 먼저 참조
+                ↳ TLB Hit → 바로 물리주소 반환
+                ↳ TLB Miss → 페이지 테이블 참조
+                    ↳ 없다 → Page Fault → 디스크에서 로딩
+                    ↳ 있다 → 물리주소 반환
+
+            → 해당 페이지가 없으면 → Page Fault → RAM에 올려야 함
+                ↳ RAM이 꽉 참 → Victim page 골라서 쫓아냄 (LRU, Clock 등)
+
+        ```
