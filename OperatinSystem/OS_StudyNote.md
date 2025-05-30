@@ -7,8 +7,8 @@
 4. **[Mutual Exclusion and Synchronization](#4-mutual-exclusion-and-synchronization)**
 5. [Deadlock and Starvation](#5-deadlock-and-starvation)
 6. [Memory Management](#6-memory-management)
-7. [Virtual Memory]
-8. [Uniprocessor Scheduling]
+7. [Virtual Memory](#7-virtual-memory)
+8. [Uniprocessor Scheduling](#8-scheduling)
 9. [Multiprocessor and Realtime Scheduling]
 10. [IO]
 11. [File Management]
@@ -928,3 +928,51 @@
             Free page list, Modified page list 등으로 분리 관리
             자주 접근되는 페이지는 재활용 기회 제공
         ```
+
+- 15강 (250530)
+
+    - Working Set Managerment
+        ```txt
+        OS는 무조건 얼만큼의 페이지를 가져올지 결정해야한다.
+
+        방법
+            Fixed allocation
+                프로세스당 고정된 수의 프레임을 할당한다.
+
+            Variable allocation
+                프로세스에 맞춘 크기의 프레임을 할당한다.
+        ```
+
+    - Replacement Scope
+        ```txt
+        Local Scope
+            Fixed Allocation
+            : 할당이 적으면 페이지 폴트가 증가하고, 너무 크면 남는 공간이 커진다.
+            Variable Allocation
+            : 시작은 작게, 점점 필요한 만큼 increase 하는 전략
+
+        Global Scope
+            Variable Allocation
+            : 폴트가 발생하는 프로세스의 크기를 점점 키워줌.
+        ```
+
+### 8. Scheduling
+
+- Scheduling
+    ```txt
+    시스템 리소스를 할당하는 행위
+
+    3 - types of processor scheduling
+        Long-term scheduling(admission scheduler)
+            : 새 프로세스를 시스템에 admit 해 줄 것인가?
+        
+        Mid-term scheduling(Swapper)
+            : swap-in , out 담당
+
+        Short-term scheduling(Dispatcher)
+            : CPU 할당 담당
+    
+    그렇다면 Long-term은 디스크의 프로그램을 들일지 말지 결정하고 (Admit)
+    mid-term 스케쥴링이 admit 된 프로세스를 메모리에 올려놓고 (Ready or Block + Suspened)
+    디스패쳐가 실제 실행을 결정하겠군 (Running)
+    ```
