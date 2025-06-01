@@ -9,7 +9,7 @@
 6. [Memory Management](#6-memory-management)
 7. [Virtual Memory](#7-virtual-memory)
 8. [Uniprocessor Scheduling](#8-scheduling)
-9. [Multiprocessor and Realtime Scheduling]
+9. [Multiprocessor and Realtime Scheduling](#9-multiprocessor-and-real-time-scheduling)
 10. [IO]
 11. [File Management]
 12. [Virtual Machine]
@@ -976,3 +976,35 @@
     mid-term 스케쥴링이 admit 된 프로세스를 메모리에 올려놓고 (Ready or Block + Suspened)
     디스패쳐가 실제 실행을 결정하겠군 (Running)
     ```
+
+
+- Fair-Share Scheduling
+    ```txt
+    프로세스A , 프로세스B가 있을 때,
+    A는 스레드가 총 10개 , B는 1개를 사용하고있다.
+    그렇다면 A에게는 스케쥴링 기회를 좀 적게, B에게는 많이 주어서
+    균등한 스케쥴링을 위한 우선순위 할당을 목표로 한다;.
+    ```
+
+### 9. Multiprocessor and Real-Time Scheduling
+
+- 16강 (250601)
+
+    - Classification of Multiprocessors
+        ```txt
+        Shared-Memory Multiprocessors
+            : 일반적인 개인용 컴퓨터
+        Distributed - Memory Multiprocessors
+            : 슈퍼 컴퓨터 , 컴퓨터들의 집단(군)
+        Heterogeneous Multiprocessors 
+            : 모바일 등 휴대폰에 들어가는 프로세서
+        ```
+    
+    - Parallelism and Synchronization Granularity
+        |Grain Size|Description|Synchronization Interval|
+        |:--:|:--:|:--:|
+        |Fine|Parallelism inherent in a single instruction stream|< 20|
+        |**Medium**|Parallel processing or multitasking within a single application|20-200|
+        |Coarse|Multiprocessing of concurrent processes in a multiprogramming environment|200-2000|
+        |Very Coarse|Distributed processing across network nodes to form a single computing environment|2000-1M|
+        |Independent|Multiple unrelated processes|not applicable|
