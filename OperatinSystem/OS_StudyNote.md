@@ -1008,3 +1008,38 @@
         |Coarse|Multiprocessing of concurrent processes in a multiprogramming environment|200-2000|
         |Very Coarse|Distributed processing across network nodes to form a single computing environment|2000-1M|
         |Independent|Multiple unrelated processes|not applicable|
+
+- 17강 (250603)
+
+    - Various Secheduling Policies
+        ```txt
+        FCFS
+            : 선입선출
+            : 스로풋 -> 낮을 수 있다. (1빠따가 선점 후 Job을 안끝내는 경우)
+            : 리스폰타임 -> 오래 걸림. (하나씩 줄서서 앞에사람 끝날때까지 기다려야하니까)
+
+        Round robin
+            : 타임퀀텀을 기반으로 균등하게 실행 시켜 주는 것
+            : 스로풋 -> 일반적으론 괜찮, 퀀텀이 짧으면 안좋을수 있음
+            : 리스폰타임 -> Good
+
+        SPN (Shortest Job First)
+            : 짦은 Job 부터 먼저하렴, 일단 실행 중이면 도중에 못바꿈(Non-Preemtive)
+            : 스로풋 -> Good
+            : 리스폰타임 -> Good
+            : 오버헤드가 좀 있으며, 긴 Job 은 스타베이션 걸릴 위험
+
+        SRT (Shortes Remaining Time)
+            : 더 짧은 Job이 들어오면 다른 Job이 실행중이어도 즉시 바꿔치기 (Preemtive)
+            : 스로풋 -> Good
+            : 리스폰타임 -> Good
+            : 오버헤드 -> 큼 , 스타베이션 위험
+        
+        HRRN
+            : Non-Preemtive
+            : SRT 의 스타베이션 문제를 해결하기 위해 구현됨
+            : Good balance
+
+        Feedback
+            : Multilevel feedback queue
+        ```
