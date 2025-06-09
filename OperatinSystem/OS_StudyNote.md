@@ -1043,3 +1043,61 @@
         Feedback
             : Multilevel feedback queue
         ```
+
+- 18강 (250609)
+
+    - Thread Scheduling
+        ```txt
+        Approach
+
+        ✅ 1. Load Sharing (or Load Balancing)
+            스레드들을 전체 CPU에 자유롭게 분배하는 방식
+            핵심 개념: CPU 간 작업량이 균등하게 되도록 하는 전역 큐 구조
+            모든 CPU가 같은 ready queue를 공유하며, 빈 CPU는 아무 작업이나 뽑아 처리
+            📌 장점: 유휴 CPU가 줄고, 시스템 전체 부하가 균등
+            ⚠️ 단점: 캐시 미스 증가 (thread migration 발생), lock contention 심화 가능
+            예시: "나 CPU0에서 돌다가 CPU2에서 이어서 돌자!" → context migration
+
+        ✅ 2. Dedicated Processor Assignment
+            프로세스를 특정 CPU에 고정해 할당하는 방식
+            각 프로세스 또는 스레드에 고정된 CPU를 지정
+            **캐시 적중률(Cache Locality)**이 높음 → 성능 좋음
+            📌 장점: context 이동 없음, 캐시 일관성 확보
+            ⚠️ 단점: 특정 CPU가 과부하되면 부하 불균형 발생 가능
+            SMP 구조에서 CPU affinity (CPU 고정 실행)로 구현되는 방식
+
+        ✅ 3. Dynamic Scheduling (or Adaptive, Hybrid)
+            로드 상태와 시스템 상황을 모니터링하여, 유동적으로 CPU에 배정
+            현재 시스템 부하, 우선순위, 캐시 정보 등을 고려해 스마트한 스케줄링
+            대부분의 최신 OS가 이 전략을 사용함
+            📌 장점: 캐시 적중률 + 부하 균형 모두 고려한 절충안
+            ⚠️ 단점: 구현 복잡, 정책 튜닝 어려움
+            예시: Windows, Linux의 CFS(Completely Fair Scheduler) 등
+
+        ✅ 4. Gang Scheduling
+            여러 개의 관련 스레드(또는 프로세스)를 하나의 그룹(gang)으로 묶어 동시에 스케줄링
+            "스레드 묶음 단위로 CPU 자원을 동시에 할당"
+            보통 병렬 프로그램에서 사용 (OpenMP, MPI 등에서 등장)
+            모든 스레드가 같은 시간 슬롯(time slice) 동안 실행됨
+            📌 장점:
+                통신/동기화 지연 최소화
+                스레드 간 진행률 불균형 해결
+                병렬성 보장
+            ⚠️ 단점:
+                자원 낭비 가능 (일부 스레드가 유휴 상태일 때도 전체 gang이 실행됨)
+                멀티코어 자원 배분 비효율
+                예시: 게임의 렌더링 엔진에서, 4개의 연산 스레드가 같이 스케줄링되어야 한다면 Gang이 적합
+        ✅ 5. Co-Scheduling (Peer Scheduling 포함)
+            서로 협력하거나 동기화가 필요한 스레드들끼리 같은 시간에 스케줄링
+            Gang Scheduling의 느슨한 형태
+            반드시 "모든 스레드를 동시에" 실행하지 않아도 됨 (조율만 함)
+            협력적 태스크 간의 지연 방지 목적
+            📌 Peer Scheduling은 Co-Scheduling의 하위 개념으로,
+            특정 peer(짝) 스레드들과 동기화가 필요한 시점에서만 동시 실행되도록 맞추는 기법.
+            📌 장점:
+                Gang보다 유연함
+                통신 비용 줄이면서 효율 증가
+            ⚠️ 단점:
+                스케줄러 설계 복잡
+                정확한 동기 타이밍 계산 필요
+        ```
