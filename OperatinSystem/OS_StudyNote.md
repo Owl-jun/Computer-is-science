@@ -1101,3 +1101,71 @@
                 스케줄러 설계 복잡
                 정확한 동기 타이밍 계산 필요
         ```
+
+- 19강 (250610)
+    - Real-Time System
+        ```txt
+        정의: 
+            작업의 정확한 결과뿐 아니라, 결과를 **정해진 시간 안에** 내는 것이 중요한 시스템
+            일반 OS와 달리 "언제 끝났느냐"가 성공/실패 판단 기준이 됨
+
+            예시: 
+                - 항공기 제어 시스템
+                - 의료기기(심장 박동기)
+                - 자동차 ABS
+                - 산업용 로봇 제어
+                - 온라인 게임 서버의 물리 연산 처리
+
+            종류:
+            | **Hard Real-Time** | 마감 시간 초과 → 시스템 실패 | 항공 제어, 핵발전소 |
+            | **Soft Real-Time** | 마감 초과 허용, 품질만 저하 | 영상 스트리밍, 온라인 게임 |
+            | **Firm Real-Time** | 결과는 무시되지만 시스템은 계속 작동 | 센서 데이터, 일부 금융 시스템 |
+
+            특징:
+                - 우선순위 기반 스케줄링 지원
+                - 지연 시간(Latency) 최소화
+                - 시간 결정성(Determinism) 중요
+                - 일반 OS와 달리 Throughput보다 Deadline을 중시
+                - Interrupt, Preemption, Timer, Task Deadline 기능이 강화됨
+
+            알고리즘:
+                📌 Rate Monotonic Scheduling (RMS)
+                    - **짧은 주기의 작업에 높은 우선순위 부여**
+                    - 고정 우선순위
+                    - CPU Utilization ≤ 69% 보장
+
+                📌 Earliest Deadline First (EDF)
+                    - **가장 마감기한이 가까운 작업부터 수행**
+                    - 동적 우선순위
+                    - CPU 이용률 100%까지 이론적 보장
+
+            일반 OS vs Real-Time OS
+            | 항목 | 일반 OS (Linux, Windows) | RTOS (VxWorks, FreeRTOS) |
+            |------|---------------------------|---------------------------|
+            | 목적 | 사용자 편의, 다양한 기능 | 정확한 시간 응답 |
+            | 스케줄링 | Round-Robin, CFS 등 | RMS, EDF 등 |
+            | 응답 시간 | 예측 불가 | 예측 가능 (Deterministic) |
+            | 신뢰성 | 상대적 낮음 | 매우 높음 |
+            | 예시 | 데스크탑, 서버 | 로봇, 임베디드 기기 |
+
+            실제 응용
+            - 게임 서버: 
+                - Soft Real-Time 성격  
+                - TPS / 프레임 동기화 / 클라이언트 위치 처리
+
+            - 임베디드 IoT 장비:
+                - FreeRTOS, RTEMS 등 사용  
+                - 센서 입력 → 일정 시간 내 처리 → 하드웨어 응답
+
+
+            심화 포인트
+
+            - `Timer Interrupt` 기반의 Task Preemption
+            - RTOS에서는 `malloc`, `new` 금지하는 경우도 많음 → `Static Allocation` 권장
+            - `Priority Inversion` 문제 및 **Priority Inheritance Protocol** 필요
+
+
+            기억할 것
+
+            실시간 시스템에서는 "정확한 결과"보다 "**정해진 시간 안의 결과**"가 더 중요하다.
+        ```
