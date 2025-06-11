@@ -10,7 +10,7 @@
 7. [Virtual Memory](#7-virtual-memory)
 8. [Uniprocessor Scheduling](#8-scheduling)
 9. [Multiprocessor and Realtime Scheduling](#9-multiprocessor-and-real-time-scheduling)
-10. [IO]
+10. [IO](#10-io)
 11. [File Management]
 12. [Virtual Machine]
 ---
@@ -1168,4 +1168,52 @@
             기억할 것
 
             실시간 시스템에서는 "정확한 결과"보다 "**정해진 시간 안의 결과**"가 더 중요하다.
+        ```
+
+### 10. I/O
+
+- 20강 (250611)
+    - IO , Buffering
+        ```txt
+        1. I/O 개념
+            정의
+                I/O는 컴퓨터가 외부 장치와 데이터를 주고받는 작업.
+                OS는 이걸 효율적으로 관리해야 시스템 성능이 보장됨.
+
+        2. I/O Buffering: 왜 필요한가?
+            개념
+                “요청이 들어오기 전에 데이터를 미리 읽어두자.”
+
+                디스크나 네트워크처럼 느린 장치에서 데이터를 읽을 때,
+                CPU가 놀지 않게 하려면 **중간 메모리 공간(buffer)**을 활용해야 함.
+
+            목적
+                입출력 속도차 보완
+                    CPU는 빠른데, I/O 장치는 느리니까 중간 완충 역할
+
+                연속적인 처리 가능
+                    I/O 요청이 끝나길 기다리지 않고 다음 연산 준비 가능
+
+        Perform data transfers in advance of requests
+
+        Block-oriented device
+            고정 크기의 블록단위로 I/O 처리 : HDD, SDD 등
+
+        Stream-oriented device
+            바이트 단위로 연속적인 스트림 처리 : 키보드, 마우스, 마이크 ...
+
+
+        I/O Buffering Schemes
+            Single Buffer
+                메모리에 하나의 버퍼만 사용
+                데이터가 채워질 때까지 CPU 대기
+
+            Double Buffer
+                버퍼 2개를 번갈아 사용
+                한쪽은 OS가 읽는 중, 다른 한쪽은 장치가 채우는 중
+                CPU와 장치가 동시에 일함 → 성능 향상
+
+            Circular Buffer (Ring Buffer)
+                버퍼를 원형 구조로 만들어 다수의 버퍼 공간을 순환 사용
+                실시간 처리 시스템이나 네트워크 통신에 많이 쓰임
         ```
