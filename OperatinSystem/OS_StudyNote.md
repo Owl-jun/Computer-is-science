@@ -11,7 +11,7 @@
 8. [Uniprocessor Scheduling](#8-scheduling)
 9. [Multiprocessor and Realtime Scheduling](#9-multiprocessor-and-real-time-scheduling)
 10. [IO](#10-io)
-11. [File Management]
+11. [File Management](#11-file-management)
 12. [Virtual Machine]
 ---
 ### 1. OS Overview
@@ -1245,4 +1245,98 @@
     | **RAID 6**        | RAID 5 + 이중 패리티  | 이중 장애 대비 가능 | 성능, 복잡도 ↑          |
     | **RAID 10 (1+0)** | 미러링 + 스트라이핑      | 성능+복구 모두 ↑  | 고비용 구조             |
 
+
+### 11. File Management 
+- 22강 (250613)
+
+    🔹 1. 파일 시스템의 기본 개념
+    파일(File): 연관된 데이터의 모음. OS는 파일 단위로 데이터를 관리한다.
+
+    파일 속성
+
+    이름(name)
+
+    식별자(identifier): 시스템 내부 식별용
+
+    위치(location)
+
+    크기(size)
+
+    보호 정보(protection): 접근 권한
+
+    시간 정보(times): 생성/수정/접근 시각 등
+
+    🔹 2. 파일 연산 (File Operations)
+    연산	설명
+    create	새 파일 생성
+    write	파일에 데이터 쓰기
+    read	파일에서 데이터 읽기
+    reposition	파일 오프셋 이동 (seek)
+    delete	파일 삭제
+    truncate	파일 내용 삭제하고 크기 0으로
+
+    🔹 3. 파일 접근 방식
+    Sequential Access: 앞에서부터 차례대로 읽고/쓰기 (ex. 텍스트 파일)
+
+    Direct Access: 특정 위치로 점프 가능 (ex. DB파일)
+
+    Indexed Access: 인덱스를 통해 접근 (ex. inode 기반 시스템)
+
+    🔹 4. 디렉토리 구조
+    Single-level Directory: 한 디렉토리에 모든 파일
+
+    Two-level Directory: 사용자별 하위 디렉토리 존재
+
+    Tree-structured Directory: 계층적 구조 (일반적)
+
+    Acyclic Graph Directory: 파일 공유 허용 (하드 링크 등)
+
+    General Graph Directory: 순환 가능 (소프트 링크)
+
+    🔹 5. 파일 시스템 구현
+    ✔️ 파일 제어 블록 (FCB: File Control Block)
+    각 파일에 대한 메타데이터 저장
+
+    파일 위치, 접근 권한, 소유자, 크기 등
+
+    ✔️ OS 내부 자료구조
+    Open File Table (시스템 전체)
+
+    Per-process Open File Table (프로세스마다)
+
+    fd (file descriptor) → 해당 테이블의 인덱스
+
+    🔹 6. 저장공간 할당 방식
+    방식	특징	장점	단점
+    Contiguous Allocation	연속된 공간	빠른 접근	단편화, 파일 크기 예측 필요
+    Linked Allocation	각 블록이 다음 포인터	단편화 없음	느린 접근
+    Indexed Allocation	인덱스 블록 사용	빠른 접근, 유연함	인덱스 블록 오버헤드
+
+    🔹 7. 자유 공간 관리 (Free Space Management)
+    Bit Map: 비트로 블록 상태 저장
+
+    Linked List: 사용 가능한 블록 연결
+
+    Grouping: N개 묶어 리스트 형태
+
+    Counting: 연속된 블록의 수까지 저장
+
+    🔹 8. 디렉토리 구현
+    선형 리스트: 간단하지만 느림
+
+    해시 테이블: 빠른 검색
+
+    🔹 9. 파일 공유 및 보호
+    공유 방법: 하드링크, 소프트링크
+
+    보호 기법: 접근 권한(읽기/쓰기/실행), ACL, 사용자/그룹/기타 구분
+
+    🔹 10. 파일 시스템 예시
+    UNIX의 inode 구조
+
+    Windows NTFS
+
+    보안, 저널링 지원
+
+    FAT32, ext4: 각각의 설계 목적과 성능 차이 있음
 
