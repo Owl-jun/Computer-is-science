@@ -5,9 +5,9 @@
 
 | 영역                             | %       | 
 | ------------------------------ | ------- | 
-| **다양한 게임 서버 아키텍쳐** | **40%** | 
-| **멀티스레드 환경 트러블 슈팅** | **30%** | 
-| **성능 분석 및 문서화**      | **30%**  |
+| **임베디드 프로젝트** | **40%** | 
+| **회로이론** | **30%** | 
+| **UART , I2C , SPI , GPIO 통신**      | **30%**  |
 
 ---
 
@@ -26,6 +26,7 @@
 |C#(WPF)|[노트](https://github.com/Owl-jun/iot-wpf-2025)|부경대 IoT 개발자과정 현장수업(C#,Wpf)|
 |수학| - |[칸 아카데미](https://ko.khanacademy.org/profile/me/courses) , [3Blue1Brown 선형대수학의 본질](https://www.youtube.com/watch?v=ic_hG2M2nG0&list=PLkoaXOTFHiqhVDo0nWybNmihCP_4BjOFR)|
 |논리회로| - |[뽕교수의논리회로](https://www.youtube.com/watch?v=23kEL4QLhuM&list=PLJV3980uI_JAgynY-Qf1wriiZstONsdn1)|
+|회로이론| - |[뽕교수의회로이론](https://www.youtube.com/watch?v=KP0lf7lI2Mw&list=PL4mqT4nB0TyA4K1BcxGJTP3izKWlN_7Eh&index=2)|
 
 
  
