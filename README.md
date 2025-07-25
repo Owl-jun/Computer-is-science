@@ -1,23 +1,26 @@
 # Computer-is-science
 공부 기록 리포지토리
 
-## 단기 PLAN
+## 단기 PLAN (07.26 ~)
 
 | 영역                             | %       | 
 | ------------------------------ | ------- | 
-| **임베디드 프로젝트** | **40%** | 
+| **H/W 통신 (CAN, I2C, SPI)** | **40%** | 
 | **회로이론** | **30%** | 
-| **UART , I2C , SPI , GPIO 통신**      | **30%**  |
+| **freeRTOS**      | **30%**  |
 
 ---
 
 |과목|노트|학습|
 |:--:|:--:|:--:|
+|RTOS&임베디드|[시리즈](https://velog.io/@owljun/series/%EC%9E%84%EB%B2%A0%EB%94%94%EB%93%9C-FreeRTOS-ESP32%EB%B6%80%ED%84%B0-STM32%EA%B9%8C%EC%A7%80)|위풍당당 독학|
 |운영체제|[노트](./OperatinSystem/OS_StudyNote.md)|[최린 운영체제](https://www.youtube.com/watch?v=lAiRp73HdOE&list=PLL3t9Nt4HrfvGwOgy6UhLtS9iVKhlk4pk) , [쉬운코드 운영체제](https://www.youtube.com/watch?v=QmtYKZC0lMU&list=PLcXyemr8ZeoQOtSUjwaer0VMJSMfa-9G-)|
-|소켓프로그래밍|[노트](https://velog.io/@owljun/series/%EC%86%8C%EC%BC%93%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)| `책` TCP/IP 소켓프로그래밍 |
+|논리회로| - |[뽕교수의논리회로](https://www.youtube.com/watch?v=23kEL4QLhuM&list=PLJV3980uI_JAgynY-Qf1wriiZstONsdn1)|
+|회로이론| [시리즈](https://velog.io/@owljun/series/%ED%9A%8C%EB%A1%9C%EC%9D%B4%EB%A1%A0) |[뽕교수의회로이론](https://www.youtube.com/watch?v=KP0lf7lI2Mw&list=PL4mqT4nB0TyA4K1BcxGJTP3izKWlN_7Eh&index=2)|
 |C++ 기초,심화|[노트](https://github.com/Owl-jun/CPPbasic2025)|[어소트락 C/C++](https://www.youtube.com/watch?v=PFc4g8mxOiI&list=PL4SIC1d_ab-aOxWPucn31NHkQvNPHK1D1), 부경대 IoT 개발자과정 현장수업(스마트 포인터, STL ...)|
 |컴퓨터구조|[노트](./ComputerArchitecture/ComputerArchitecture_StudyNote.md)|[최린 컴퓨터구조](https://www.youtube.com/watch?v=I6g4giG59u0&list=PLL3t9Nt4Hrfv-6V3ylNL4N90TztqlSJOe)|
 |네트워크|[노트](./Network/NET_StudyNote.md)|[이석복 컴퓨터네트워크](http://www.kocw.net/home/enrolment/enrolmentView.do?cid=6166c077e545b736&lid=dd53ceac302ff18b)|
+|소켓프로그래밍|[노트](https://velog.io/@owljun/series/%EC%86%8C%EC%BC%93%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%B0%8D)| `책` TCP/IP 소켓프로그래밍 |
 |자료구조&알고리즘|[노트](https://github.com/Owl-jun/iot-algorithm-2025)|부경대 IoT 개발자과정 현장수업, 프로그래머스 , [쉬운코드 데이터구조](https://www.youtube.com/watch?v=-2YpvLCT5F8&list=PLcXyemr8ZeoR82N8uZuG9xVrFIfdnLd72)|
 |데이터베이스|[노트](https://github.com/Owl-jun/iot-database-2025)|부경대 IoT 개발자과정 현장수업|
 |리눅스|[노트](https://github.com/Owl-jun/ubuntu)|`책` 이것이 우분투 리눅스다|
@@ -25,8 +28,6 @@
 |C# 기초|[노트](https://github.com/Owl-jun/iot-winapp-2025)|부경대 IoT 개발자과정 현장수업(C#,WinApp)|
 |C#(WPF)|[노트](https://github.com/Owl-jun/iot-wpf-2025)|부경대 IoT 개발자과정 현장수업(C#,Wpf)|
 |수학| - |[칸 아카데미](https://ko.khanacademy.org/profile/me/courses) , [3Blue1Brown 선형대수학의 본질](https://www.youtube.com/watch?v=ic_hG2M2nG0&list=PLkoaXOTFHiqhVDo0nWybNmihCP_4BjOFR)|
-|논리회로| - |[뽕교수의논리회로](https://www.youtube.com/watch?v=23kEL4QLhuM&list=PLJV3980uI_JAgynY-Qf1wriiZstONsdn1)|
-|회로이론| - |[뽕교수의회로이론](https://www.youtube.com/watch?v=KP0lf7lI2Mw&list=PL4mqT4nB0TyA4K1BcxGJTP3izKWlN_7Eh&index=2)|
 
 
  
