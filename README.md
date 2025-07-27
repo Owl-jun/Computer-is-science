@@ -13,7 +13,8 @@
 
 |과목|노트|학습|
 |:--:|:--:|:--:|
-|RTOS&임베디드|[시리즈](https://velog.io/@owljun/series/%EC%9E%84%EB%B2%A0%EB%94%94%EB%93%9C-FreeRTOS-ESP32%EB%B6%80%ED%84%B0-STM32%EA%B9%8C%EC%A7%80)|위풍당당 독학|
+|RTOS&H/W통신|[시리즈](https://velog.io/@owljun/series/%EC%9E%84%EB%B2%A0%EB%94%94%EB%93%9C-FreeRTOS-ESP32%EB%B6%80%ED%84%B0-STM32%EA%B9%8C%EC%A7%80)|위풍당당 독학|
+|ARM Cortex-M 프로세서|[시리즈](https://velog.io/@owljun/series/ARM-Cortex-M-%ED%94%84%EB%A1%9C%EC%84%B8%EC%84%9C-%ED%95%99%EC%8A%B5)|[인프런 홍영기 강좌](https://www.inflearn.com/course/arm-cortex-m-%ED%94%84%EB%A1%9C%EC%84%B8%EC%84%9C/dashboard)|
 |운영체제|[노트](./OperatinSystem/OS_StudyNote.md)|[최린 운영체제](https://www.youtube.com/watch?v=lAiRp73HdOE&list=PLL3t9Nt4HrfvGwOgy6UhLtS9iVKhlk4pk) , [쉬운코드 운영체제](https://www.youtube.com/watch?v=QmtYKZC0lMU&list=PLcXyemr8ZeoQOtSUjwaer0VMJSMfa-9G-)|
 |논리회로| - |[뽕교수의논리회로](https://www.youtube.com/watch?v=23kEL4QLhuM&list=PLJV3980uI_JAgynY-Qf1wriiZstONsdn1)|
 |회로이론| [시리즈](https://velog.io/@owljun/series/%ED%9A%8C%EB%A1%9C%EC%9D%B4%EB%A1%A0) |[뽕교수의회로이론](https://www.youtube.com/watch?v=KP0lf7lI2Mw&list=PL4mqT4nB0TyA4K1BcxGJTP3izKWlN_7Eh&index=2)|
