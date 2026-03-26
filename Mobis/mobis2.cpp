@@ -42,7 +42,7 @@ int solution(int temperature, int t1, int t2, int a, int b, vector<int> onboard)
             }
 
             /* Keep Temperature */
-            vMemo[iTime + 1][iTemp]                 = min(vMemo[iTime + 1][iTemp] , vMemo[iTime][iTemp] + b);
+            vMemo[iTime + 1][iTemp]                     = min(vMemo[iTime + 1][iTemp] , vMemo[iTime][iTemp] + b);
 
             /* Turn Off */
             if (iTemp > temperature) iRecoveryDir = -1;
